@@ -18,3 +18,17 @@
  * ```
  * This problem should be solved by a self join on the "film_category" table.
  */
+
+SELECT DISTINCT f.title
+FROM film AS f
+JOIN film_category AS fc ON f.film_id = fc.film_id
+WHERE fc.category_id IN (
+    SELECT category_id
+    FROM film_category
+    JOIN film USING (film_id)
+    WHERE film.title = 'AMERICAN CIRCUS'
+)
+GROUP BY f.film_id, f.title
+HAVING COUNT(DISTINCT fc.category_id) >= 2
+ORDER BY f.title;
+
